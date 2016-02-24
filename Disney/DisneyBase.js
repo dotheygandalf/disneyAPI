@@ -87,6 +87,13 @@ function DisneyBase(config) {
             // work out if we have fastpass
             obj.fastPass = (ride.waitTime.fastPass && ride.waitTime.fastPass.available);
 
+            if(ride.waitTime.fastPass) {
+              obj.fastPassWindow = {
+                startDate: ride.waitTime.fastPass.startTime,
+                endDate: ride.waitTime.fastPass.endTime
+              };
+            }
+
             // add to our return rides array
             rides.push(obj);
           }
