@@ -1,6 +1,5 @@
 var Park = require("../parkBase");
 
-var request = require("request");
 var moment = require("moment-timezone");
 
 module.exports = UniversalJapanBase;
@@ -42,9 +41,7 @@ function UniversalJapanBase(config) {
 
   // Get a URL
   this.GetURL = function(url, options, callback) {
-    var headers = {
-      "User-Agent": self.useragent,
-    };
+    var headers = {};
 
     // apply custom headers (if set)
     if (options && options.headers) {
@@ -74,9 +71,7 @@ function UniversalJapanBase(config) {
       }
     }
 
-    self.Dbg("Fetching...", requestBody);
-
-    request(requestBody, function(err, resp, body) {
+    self.MakeNetworkRequest(requestBody, function(err, resp, body) {
       if (err) return self.Error("Error making Universal Japan API request", err, callback);
 
       return callback(null, body);

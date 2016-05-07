@@ -6,6 +6,7 @@ var parks = [
   require("./Disney/DisneylandParis"),
   require("./Disney/DisneylandHongKong"),
   require("./Disney/DisneyTokyo"),
+  require("./Disney/ShanghaiDisneyResort"),
   // SeaWorld
   require("./SeaWorld/SeaWorldParks"),
   require("./SeaWorld/BuschGardens"),
@@ -14,6 +15,11 @@ var parks = [
   require("./Universal/UniversalStudiosFlorida"),
   // Six Flags
   require("./SixFlags/SixFlagsParks"),
+  // Europa-Park
+  require("./Misc/EuropaPark"),
+  // Alton Towers and Chessington
+  require("./Misc/AltonTowers"),
+  require("./Misc/ChessingtonWorldOfAdventures"),
 ];
 
 // export all parks

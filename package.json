@@ -1,7 +1,7 @@
 {
   "name": "wdwjs",
   "description": "Walt Disney World API Framework",
-  "version": "3.0.5",
+  "version": "3.1.0",
   "author": {
     "name": "Jamie Holding",
     "email": "me@jamie.holdings"
@@ -15,7 +15,7 @@
     "moment": "^2.11.1",
     "moment-range": "^2.1.0",
     "moment-timezone": "^0.5.0",
-    "random-useragent": "^0.2.1",
+    "random-useragent": "^0.3.0",
     "request": "2.x.x"
   },
   "engines": {
@@ -27,7 +27,8 @@
     "url": "git://github.com/cubehouse/wdwJS.git"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha"
+    "test": "node_modules/.bin/mocha",
+    "prepublish": "node ./Scripts/UpdateREADME.js"
   },
   "main": "index.js",
   "readmeFilename": "README.md",

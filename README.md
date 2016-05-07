@@ -9,33 +9,6 @@ An unofficial API library for accessing Disney, Universal and SeaWorld ride wait
 
     npm install wdwjs --save
 
-# Change Log
-
-v3.0.0
-
-* Refactored codebase significantly
-* Added SeaWorld parks (including Busch Gardens and Sesame Place)
-* Added Universal Studios and Island Of Adventure parks to API
-* Setting environment variable "DEBUG=true" will supply better debugging information that we've had in previous versions
-* Disney World Florida, Disneyland California, Disneyland Paris, Disneyland Shanghai and Disneyland Hong Kong now share a common codebase.
-* (breaking change) GetSchedule is now GetOpeningTimes
-* (breaking change) Schedules now return a maximum of one element per day, with "special" opening hours as a sub-object called "special" (eg. Extra Magic Hours)
-* (breaking change) Park object names have been renamed
-* (breaking change) No longer need to create a new wdwjs() object to start the API, make separate new objects for each park you wish to access
-* 3.0.3 added BETA Six Flags support. Some parks do not yet return proper wait time data, see [#12](https://github.com/cubehouse/wdwJS/issues/12)
-
-v2.0.0
-
-* (breaking change) You must now specify "WDWRequests: true" in your setup options if you wish direct access to WDW API function helpers
-* Disneyland Paris is now part of the same API service as Disney World Resort and Disneyland California.
-* Added Tokyo Disneyland to supported parks
-* Added (non-Disney) Universal Orlando parks to supported parks (added: 2.0.4)
-
-v1.0.0
-
-* (breaking change) Response formats simplified so all parks return same data structure
-* Added Disneyland Paris
-
 # Example Use
 
     // Setup API
@@ -76,6 +49,7 @@ v1.0.0
 * Disneyland Hong Kong (DisneyAPI.DisneylandHongKong)
 * Disneyland Tokyo (DisneyAPI.DisneylandTokyo)
 * DisneySea Tokyo (DisneyAPI.DisneySeaTokyo)
+* Shanghai Disney Resort (DisneyAPI.ShanghaiDisneyResort)
 * SeaWorld Florida (DisneyAPI.SeaWorldFlorida)
 * SeaWorld San Antonio (DisneyAPI.SeaWorldSanAntonio)
 * SeaWorld San Diego (DisneyAPI.SeaWorldSanDiego)
@@ -101,8 +75,59 @@ v1.0.0
 * Six Flags White Water, Atlanta (DisneyAPI.SixFlagsWhiteWaterAtlanta)
 * Six Flags Mexico (DisneyAPI.SixFlagsMexico)
 * La Ronde, Montreal (DisneyAPI.SixFlagsLaRondeMontreal)
+* Europa-Park (DisneyAPI.EuropaPark)
+* Alton Towers (DisneyAPI.AltonTowers)
+* Chessington World Of Adventures (DisneyAPI.ChessingtonWorldOfAdventures)
 
 <!-- END_SUPPORTED_PARKS_LIST -->
+
+# Supported Park Features
+
+<!-- START_PARK_FEATURES_SUPPORTED -->
+|Park|Wait Times|Park Opening Times|Ride Opening Times|
+|:---|:---------|:-----------------|:-----------------|
+|Magic Kingdom - Walt Disney World Florida|&#10003;|&#10003;|&#10003;|
+|Epcot - Walt Disney World Florida|&#10003;|&#10003;|&#10003;|
+|Hollywood Studios - Walt Disney World Florida|&#10003;|&#10003;|&#10003;|
+|Animal Kingdom - Walt Disney World Florida|&#10003;|&#10003;|&#10003;|
+|Magic Kingdom - Disneyland California|&#10003;|&#10003;|&#10003;|
+|California Adventure - Disneyland California|&#10003;|&#10003;|&#10003;|
+|Magic Kingdom - Disneyland Paris|&#10003;|&#10003;|&#10003;|
+|Walt Disney Studios - Disneyland Paris|&#10003;|&#10003;|&#10003;|
+|Disneyland Hong Kong|&#10003;|&#10003;|&#10003;|
+|Disneyland Tokyo|&#10003;|&#10003;|&#10003;|
+|DisneySea Tokyo|&#10003;|&#10003;|&#10003;|
+|Shanghai Disney Resort|&#10003;|&#10003;|&#10003;|
+|SeaWorld Florida|&#10003;|&#10003;|&#10007;|
+|SeaWorld San Antonio|&#10003;|&#10003;|&#10007;|
+|SeaWorld San Diego|&#10003;|&#10003;|&#10007;|
+|Busch Gardens Williamsburg|&#10003;|&#10003;|&#10007;|
+|Busch Gardens Tampa|&#10003;|&#10003;|&#10007;|
+|Sesame Place|&#10003;|&#10003;|&#10007;|
+|Universal Studios Orlando|&#10003;|&#10003;|&#10007;|
+|Universal Island Of Adventure|&#10003;|&#10003;|&#10007;|
+|Six Flags Over Texas|&#10003;|&#10003;|&#10007;|
+|Six Flags Over Georgia|&#10003;|&#10003;|&#10007;|
+|Six Flags St. Louis|&#10003;|&#10003;|&#10007;|
+|Six Flags Great Adventure|&#10003;|&#10003;|&#10007;|
+|Six Flags Magic Mountain|&#10003;|&#10003;|&#10007;|
+|Six Flags Great America|&#10003;|&#10003;|&#10007;|
+|Six Flags Fiesta Texas|&#10003;|&#10003;|&#10007;|
+|Six Flags Hurricane Harbor, Arlington|&#10003;|&#10003;|&#10007;|
+|Six Flags Hurricane Harbor, Los Angeles|&#10003;|&#10003;|&#10007;|
+|Six Flags America|&#10003;|&#10003;|&#10007;|
+|Six Flags Discovery Kingdom|&#10003;|&#10003;|&#10007;|
+|Six Flags New England|&#10003;|&#10003;|&#10007;|
+|Six Flags Hurricane Harbor, Jackson|&#10003;|&#10003;|&#10007;|
+|The Great Escape|&#10003;|&#10003;|&#10007;|
+|Six Flags White Water, Atlanta|&#10003;|&#10003;|&#10007;|
+|Six Flags Mexico|&#10003;|&#10003;|&#10007;|
+|La Ronde, Montreal|&#10003;|&#10003;|&#10007;|
+|Europa-Park|&#10003;|&#10003;|&#10007;|
+|Alton Towers|&#10003;|&#10003;|&#10007;|
+|Chessington World Of Adventures|&#10003;|&#10003;|&#10007;|
+
+<!-- END_PARK_FEATURES_SUPPORTED -->
 
 # Result Objects
 
@@ -115,6 +140,17 @@ v1.0.0
             waitTime: (number: current wait time in minutes),
             active: (bool: is the ride currently active?),
             fastPass: (bool: is fastpass available for this ride?),
+            status: (string: will either be "Operating", "Closed", or "Down"),
+            schedule: { **schedule will only be present if park.supports_ride_schedules is true**
+              openingTime: (timeFormat timestamp: opening time of ride),
+              closingTime: (timeFormat timestamp: closing time of ride),
+              type: (string: "Operating" or "Closed"),
+              special: [ (array of "special" ride times, usually Disney Extra Magic Hours or similar at other parks - field may be null)
+                openingTime: (timeFormat timestamp: opening time for ride),
+                closingTime: (timeFormat timestamp: closing time for ride),
+                type: (string: type of schedule eg. "Extra Magic Hours", but can be "Event" or "Special Ticketed Event" or other)
+              ]
+            },
         },
         ...
     ]
@@ -144,6 +180,7 @@ There are some values available on each park object that may be useful.
 |:-------|:----------|
 |name|Name of the park|
 |park_timezone|The park's local timezone|
+|supports_ride_schedules|Does this park return schedules for rides?|
 
     var DisneyAPI = require("wdwjs");
 
@@ -167,6 +204,7 @@ Prints:
     * Disneyland Hong Kong => Asia/Hong_Kong
     * Disneyland Tokyo => Asia/Tokyo
     * DisneySea Tokyo => Asia/Tokyo
+    * Shanghai Disney Resort => Asia/Shanghai
     * SeaWorld Florida => America/New_York
     * SeaWorld San Antonio => America/Chicago
     * SeaWorld San Diego => America/Los_Angeles
@@ -192,6 +230,9 @@ Prints:
     * Six Flags White Water, Atlanta => America/New_York
     * Six Flags Mexico => America/Toronto
     * La Ronde, Montreal => America/Toronto
+    * Europa-Park => Europe/Berlin
+    * Alton Towers => Europe/London
+    * Chessington World Of Adventures => Europe/London
 
 <!-- END_PARK_TIMEZONE_LIST -->
 
@@ -222,6 +263,40 @@ Default options:
 
     // You can also configure these settings after initialisation with Config(key, value)
     MagicKingdom.Config("debug", false);
+
+# Change Log
+
+v3.0.0
+
+* Refactored codebase significantly
+* Added SeaWorld parks (including Busch Gardens and Sesame Place)
+* Added Universal Studios and Island Of Adventure parks to API
+* Setting environment variable "DEBUG=true" will supply better debugging information that we've had in previous versions
+* Disney World Florida, Disneyland California, Disneyland Paris, Disneyland Shanghai and Disneyland Hong Kong now share a common codebase.
+* (breaking change) GetSchedule is now GetOpeningTimes
+* (breaking change) Schedules now return a maximum of one element per day, with "special" opening hours as a sub-object called "special" (eg. Extra Magic Hours)
+* (breaking change) Park object names have been renamed
+* (breaking change) No longer need to create a new wdwjs() object to start the API, make separate new objects for each park you wish to access
+* 3.0.3 added BETA Six Flags support. Some parks do not yet return proper wait time data, see [#12](https://github.com/cubehouse/wdwJS/issues/12)
+* 3.0.6 added ride schedules (only for Disney parks) and new status string for each ride wait time entry
+* 3.0.7 fixed Tokyo Disneyland ride active status and added updateTime to Tokyo ride outputs (see #17)
+* 3.0.10 added Alton Towers to the supported parks
+* 3.0.11 added Chessington to the supported parks
+* 3.0.12 added Shanghai Disney Resort to the supported parks
+* 3.0.14 added Europa-Park to the supported parks
+* 3.1.0 fixed Disney API calls with a new client ID
+
+v2.0.0
+
+* (breaking change) You must now specify "WDWRequests: true" in your setup options if you wish direct access to WDW API function helpers
+* Disneyland Paris is now part of the same API service as Disney World Resort and Disneyland California.
+* Added Tokyo Disneyland to supported parks
+* Added (non-Disney) Universal Orlando parks to supported parks (added: 2.0.4)
+
+v1.0.0
+
+* (breaking change) Response formats simplified so all parks return same data structure
+* Added Disneyland Paris
 
 # Development
 

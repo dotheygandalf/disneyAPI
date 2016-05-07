@@ -1,6 +1,5 @@
 var Park = require("../parkBase");
 
-var request = require("request");
 var moment = require("moment-timezone");
 
 // use one access token for all Six Flags parks
@@ -126,6 +125,7 @@ function SixFlagsBase(config) {
               waitTime: ride.status == "AttractionStatusOpen" ? (parseInt(ride.waitTime, 10) || 0) : 0,
               active: ride.status == "AttractionStatusOpen" ? true : false,
               fastPass: rideNames[ride.rideId] && rideNames[ride.rideId].isFlashPassEligible ? true : false,
+              status: ride.status == "AttractionStatusTemporarilyClosed" ? "Down" : (ride.status == "AttractionStatusOpen" ? "Operating" : "Closed"),
             });
           }
 
@@ -214,7 +214,6 @@ function SixFlagsBase(config) {
   // make an API request
   this.MakeRequest = function(url, options, callback) {
     var headers = {
-      "User-Agent": self.useragent,
       'Accept-Language': 'en-US',
       'Connection': 'Keep-Alive',
     };
@@ -255,9 +254,7 @@ function SixFlagsBase(config) {
     // can also just set the request body directly
     if (options.body) requestBody.body = options.body;
 
-    self.Dbg("Fetching...", requestBody);
-
-    request(requestBody, function(err, resp, body) {
+    self.MakeNetworkRequest(requestBody, function(err, resp, body) {
       if (err) return self.Error("Error making Six Flags API request", err, callback);
 
       return callback(null, body);
